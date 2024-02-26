@@ -19,7 +19,6 @@ public:
     {
         graph[u][v] = weight;
     }
-
     void print_adjacency_matrix()
     {
         cout << "Macierz sasiedztwa:" << endl;
@@ -32,7 +31,6 @@ public:
             cout << endl;
         }
     }
-
     void print_adjacency_list()
     {
         cout << "Lista sasiadow:" << endl;
@@ -49,7 +47,6 @@ public:
             cout << endl;
         }
     }
-
     void print_two_arrays()
     {
         cout << "Dwie tablice:" << endl;
@@ -66,7 +63,8 @@ public:
     }
 };
 
-int main() {
+int main() 
+{
     int V = 4;
     Graph graph(V);
     graph.add_edge(0, 1, 10);
