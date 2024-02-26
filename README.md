@@ -1,5 +1,5 @@
-# Projekt_AiSDII
-## Grupa 4
+# Projekt_AiSDII (LE)
+## Grupa 4 
 
 1. Kamil Krystowski
 2. Maciej Zajdel
