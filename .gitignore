@@ -1,0 +1,61 @@
+# Ignoruj wszystkie pliki .exe
+*.exe
+
+# Ignoruj pliki tymczasowe
+*.temp
+*.tmp
+
+# Ignoruj katalogi bin i obj
+bin/
+obj/
+
+# Ignoruj pliki konfiguracyjne IDE (np. dla Visual Studio, Eclipse, IntelliJ)
+*.suo
+*.user
+*.userprefs
+*.sln.docstates
+
+# Visual Studio Code - ignoruj ustawienia
+.vscode/
+
+# Ignoruj katalogi build
+build/
+out/
+
+# Ignoruj katalogi .vs - tymczasowe pliki Visual Studio
+.vs/
+
+# Ignoruj pliki dziennika
+*.log
+
+# Ignoruj pliki baz danych SQLite
+*.db
+*.sqlite
+
+# Ignoruj katalogi node_modules dla projektów Node.js
+node_modules/
+
+# Ignoruj pliki pakietów
+*.nupkg
+
+# Ignoruj pliki certyfikatów
+*.pfx
+*.cert
+
+# Ignoruj katalogi z zależnościami
+packages/
+
+# Ignoruj pliki backup
+*.bak
+*.backup
+
+# Ignoruj pliki konfiguracyjne edytorów tekstowych
+*.sublime-project
+*.sublime-workspace
+
+# Ignoruj pliki Thumb.db i .DS_Store w systemach Windows i macOS
+Thumbs.db
+.DS_Store
+
+# Ignoruj katalogi dla narzędzi CI/CD
+.ci/
