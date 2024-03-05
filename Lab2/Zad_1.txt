@@ -1,0 +1,19 @@
+Aby przedstawić przykład sieci, w której wartość maksymalnego przepływu wynosi 10, a liczba iteracji algorytmu Forda-Fulkersona może być większa niż dowolna liczba naturalna k przy pewnym niekorzystnym wyborze ścieżek powiększających, skonstruujemy sieć składającą się z kilku kluczowych krawędzi i wierzchołków.
+
+Konstrukcja sieci
+1.Tworzymy źródło s i ujście t.
+
+2.Dodajemy wierzchołki pośrednie A,B,C, i D.
+
+3 Tworzymy krawędzie:
+s→A z przepustowością 10,
+A→B z przepustowością 1,
+B→t z przepustowością 10,
+A→C z przepustowością 10,
+C→D z przepustowością 10,
+D→t z przepustowością 10,
+A→t z przepustowością 1.
+
+4.Dodajemy również krawędzie zwrotne z przepustowościami równymi 0 dla każdej krawędzi (niezbędne do algorytmu Forda-Fulkersona, aby móc 'cofać' przepływ).
+
+W tej sieci, maksymalny przepływ z s do t wynosi 10, który może być osiągnięty przez przepływ z s do A, z A do C, z C do D, i z D do t (oraz ewentualnie mały przepływ bezpośrednio z A do t).
