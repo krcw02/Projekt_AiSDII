@@ -13,9 +13,9 @@
     - [x] Algorytm Knutha-Morrisa-Pratta (algorytm wyszukiwania wzorca w tekście)
     - [x] Algorytm Karpa-Rabina (algorytm wyszukiwania wzorca w tekście)
     - [x] Algorytm Kruskala (algorytm wyznaczający minimalne drzewo rozpinające)
-    - [] Algorytm Dijkstry (algorytm do znajdowania najkrótszej ścieżki w grafie ważonym)
-    - [] Algorytmy przeszukiwania (DFS/BFS)
-    - [] Algorytm Huffman (bezstratna kompresja danych)
+    - [x] Algorytm Dijkstry (algorytm do znajdowania najkrótszej ścieżki w grafie ważonym)
+    - [x] Algorytmy przeszukiwania (DFS/BFS)
+    - [x] Algorytm Huffman (bezstratna kompresja danych)
     - [] Programowanie dynamiczne
     - [] Problem plecakowy
     
