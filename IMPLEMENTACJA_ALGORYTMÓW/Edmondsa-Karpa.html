@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="pl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <!-- css with dark body -->
+    <style>
+      body {
+        background-color: #1d1d1d;
+        color: #fff;
+        margin: 0;
+        font-family: Arial, sans-serif;
+      }
+      h1 {
+        text-align: center;
+        margin-top: 20px;
+      }
+      textarea {
+        width: 90%;
+        margin: 20px;
+        padding: 10px;
+        background-color: #2d2d2d;
+        color: #fff;
+        border: none;
+        resize: none;
+      }
+      .lPanel {
+        width: 30%;
+        height: 100vh;
+        background-color: #2d2d2d;
+        float: left;
+        z-index: 2;
+      }
+      button {
+        width: 90%;
+        margin: 8px;
+        margin-left: auto;
+        margin-right: auto;
+        display: block;
+        padding: 10px;
+        background-color: #3d3d3d;
+        color: #fff;
+        border: none;
+        cursor: pointer;
+        position: static;
+        letter-spacing: 0.4px;
+        font-size: 16px;
+      }
+      .rPanel {
+        width: 70%;
+        height: 100vh;
+        background-color: #3d3d3d;
+        float: right;
+      }
+      .wyniki {
+        width: 90%;
+        margin: 20px;
+        padding: 10px;
+        background-color: #2d2d2d;
+        color: #fff;
+        border: none;
+        line-height: 22px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="lPanel">
+      <h1>Algorytm Edmondsa-Karpa</h1>
+
+      <textarea
+        name="input"
+        id="input"
+        cols="30"
+        rows="10"
+        placeholder="Wprowadź dane w postaci macierzy"
+      ></textarea>
+      <button onclick="generate()">Generuj graf</button>
+      <button onclick="calculate()">Wyznacz maksymalny przepływ</button>
+      <div class="wyniki"></div>
+    </div>
+    <div class="rPanel"></div>
+    <script src="https://unpkg.com/force-graph"></script>
+    <script>
+      const graphContainer = document.querySelector(".rPanel");
+
+      function generate(graf = null) {
+        const input = document.getElementById("input").value.trim();
+        const lines = input.split("\n");
+        let matrix = lines.map((line) =>
+          line.split(",").map((value) => parseInt(value.trim(), 10))
+        );
+        if (graf) {
+          matrix = graf;
+        } else {
+          document.querySelector(".wyniki").innerHTML = "";
+        }
+        const graphData = {
+          nodes: [...Array(matrix.length).keys()].map((i) => ({
+            id: i,
+            name: `Node ${i + 1}`,
+          })),
+          links: [],
+        };
+
+        matrix.forEach((row, src) => {
+          row.forEach((val, trg) => {
+            if (val > 0) {
+              graphData.links.push({
+                source: src,
+                target: trg,
+                name: `${val}`,
+                capacity: val,
+              });
+            }
+          });
+        });
+
+        // Czyszczenie poprzedniego grafu
+        while (graphContainer.firstChild) {
+          graphContainer.removeChild(graphContainer.firstChild);
+        }
+
+        // Tworzenie i konfiguracja grafu
+
+        const Graph = ForceGraph()(graphContainer)
+          .graphData(graphData)
+          .width(graphContainer.clientWidth)
+          .height(graphContainer.clientHeight)
+          .nodeRelSize(6)
+          .nodeId("id")
+          .nodeAutoColorBy("id")
+          .nodeLabel((node) => `${node.name}`)
+          .nodeCanvasObject((node, ctx, globalScale) => {
+            // Rysuje węzeł jako koło
+            const size = 6;
+            ctx.beginPath();
+            ctx.arc(node.x, node.y, size, 0, 2 * Math.PI, false);
+            ctx.fillStyle = node.color;
+            ctx.fill();
+
+            // Rysuje ID węzła jako tekst
+            const fontSize = 12 / globalScale; // Dynamicznie dostosowany rozmiar tekstu
+            ctx.font = `${fontSize + 5}px Sans-Serif`;
+            ctx.textAlign = "center";
+            ctx.textBaseline = "middle";
+            ctx.fillStyle = "rgba(255, 255, 255, 1)";
+            ctx.fillText(node.id, node.x, node.y);
+          })
+          .linkColor(() => "#AAA")
+          .linkWidth((link) => Math.sqrt(link.capacity))
+          .linkDirectionalParticles(2) // Dodajemy cząsteczki, aby zaznaczyć kierunek
+          .linkDirectionalParticleSpeed((d) => d.value * 0.001) // Prędkość cząsteczek zależna od wagi
+          .linkDirectionalParticleWidth(1)
+          .linkCanvasObjectMode(() => "before") // Rysuje etykiety przed krawędziami
+          .linkCanvasObject((link, ctx, globalScale) => {
+            // Oblicza środek krawędzi dla etykiety
+            const start = { x: link.source.x, y: link.source.y };
+            const end = { x: link.target.x, y: link.target.y };
+            const midpointX = (start.x + end.x) / 2;
+            const midpointY = (start.y + end.y) / 2;
+
+            // Ustawienia dla tekstu etykiety
+            const labelText = link.name;
+            const fontSize = 12 / globalScale; // Dynamiczny rozmiar fontu w zależności od skali
+            ctx.font = `${fontSize + 3}px Sans-Serif`;
+            ctx.fillStyle = "rgba(255, 255, 255, 1)";
+            ctx.textAlign = "center";
+            ctx.textBaseline = "middle";
+
+            // Rysowanie etykiety
+            ctx.fillText(labelText, midpointX, midpointY);
+          })
+
+          .linkDirectionalArrowLength(8)
+          .linkDirectionalArrowColor(() => "#CCC")
+          .linkDirectionalArrowRelPos(0.99)
+          .onNodeDragEnd((node) => {
+            node.fx = node.x;
+            node.fy = node.y;
+          });
+      }
+
+      function calculate() {
+        const input = document.getElementById("input").value.trim();
+        const lines = input.split("\n");
+        const matrix = lines.map((line) =>
+          line.split(",").map((value) => parseInt(value.trim(), 10))
+        );
+
+        const { maxFlow, flowMatrix } = algorytmEdmondsaKarpa(matrix);
+
+        generate(flowMatrix);
+
+        const wynikiDiv = document.querySelector(".wyniki");
+        wynikiDiv.innerHTML = `Maksymalny przepływ: ${maxFlow}`;
+      }
+
+      function bfs(rGraph, s, t, parent) {
+        const visited = [];
+        const queue = [];
+        const V = rGraph.length;
+        for (let i = 0; i < V; ++i) {
+          visited[i] = false;
+        }
+        queue.push(s);
+        visited[s] = true;
+        parent[s] = -1;
+
+        while (queue.length !== 0) {
+          const u = queue.shift();
+
+          for (let v = 0; v < V; v++) {
+            if (visited[v] === false && rGraph[u][v] > 0) {
+              if (v === t) {
+                parent[v] = u;
+                return true;
+              }
+              queue.push(v);
+              parent[v] = u;
+              visited[v] = true;
+            }
+          }
+        }
+        return false;
+      }
+
+      function edmondsKarp(graph, s, t) {
+        const rGraph = [];
+        const V = graph.length;
+        for (let u = 0; u < V; u++) {
+          const temp = [];
+          for (let v = 0; v < V; v++) {
+            temp.push(graph[u][v]);
+          }
+          rGraph.push(temp);
+        }
+        const parent = new Array(V);
+        let maxFlow = 0;
+
+        while (bfs(rGraph, s, t, parent)) {
+          let pathFlow = Infinity;
+          for (let v = t; v !== s; v = parent[v]) {
+            const u = parent[v];
+            pathFlow = Math.min(pathFlow, rGraph[u][v]);
+          }
+          for (let v = t; v !== s; v = parent[v]) {
+            const u = parent[v];
+            rGraph[u][v] -= pathFlow;
+            rGraph[v][u] += pathFlow;
+          }
+          maxFlow += pathFlow;
+        }
+
+        const flowMatrix = graph.map((row, i) =>
+          row.map((val, j) => val - rGraph[i][j])
+        );
+
+        return { maxFlow, flowMatrix };
+      }
+
+      function compereMatrix(matrix1, matrix2) {
+        let result = "";
+        //wyznacz tablice sasiadow i zaznacz w nawiasach () zmiany
+        for (let i = 0; i < matrix1.length; i++) {
+          result += `Wezeł ${i} : `;
+          for (let j = 0; j < matrix1[i].length; j++) {
+            if (matrix1[i][j] > 0) {
+              if (matrix1[i][j] !== matrix2[i][j]) {
+                result += `${j}(${matrix1[i][j]} -> ${matrix2[i][j]}) `;
+              } else {
+                result += `${j}(${matrix1[i][j]}) `;
+              }
+            }
+          }
+          result += "<br>";
+        }
+        return result;
+      }
+
+      function calculate() {
+        const input = document.getElementById("input").value.trim();
+        const lines = input.split("\n");
+        const matrix = lines.map((line) =>
+          line.split(",").map((value) => parseInt(value.trim(), 10))
+        );
+
+        const { maxFlow, flowMatrix } = edmondsKarp(
+          matrix,
+          0,
+          matrix.length - 1
+        );
+
+        const wynikiDiv = document.querySelector(".wyniki");
+        wynikiDiv.innerHTML = `Maksymalny przepływ: ${maxFlow}<br><br>
+        ${compereMatrix(matrix, flowMatrix)}`;
+
+        generate(flowMatrix);
+      }
+    </script>
+  </body>
+</html>
