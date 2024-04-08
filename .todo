@@ -4,8 +4,18 @@
     - [x] 📃 Zadanie 5
     Kacper:
     - [x] 🎨 Zadanie 3
-
     Wspólnie:
     - [x] Zadanie 1
     - [x] Zadanie 2
+
+(#PROGRAMY PROJEKT):
+    - [x] Algorytm Grahama (algorytm wyszukiwania otoczki wypukłej)
+    - [x] Algorytm Knutha-Morrisa-Pratta (algorytm wyszukiwania wzorca w tekście)
+    - [x] Algorytm Karpa-Rabina (algorytm wyszukiwania wzorca w tekście)
+    - [x] Algorytm Kruskala (algorytm wyznaczający minimalne drzewo rozpinające)
+    - [] Algorytm Dijkstry (algorytm do znajdowania najkrótszej ścieżki w grafie ważonym)
+    - [] Algorytmy przeszukiwania (DFS/BFS)
+    - [] Algorytm Huffman (bezstratna kompresja danych)
+    - [] Programowanie dynamiczne
+    - [] Problem plecakowy
     
