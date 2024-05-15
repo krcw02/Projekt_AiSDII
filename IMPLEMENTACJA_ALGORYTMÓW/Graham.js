@@ -23,7 +23,7 @@ function distanceSquared(p1, p2)
     return Math.pow(p2[0] - p1[0], 2) + Math.pow(p2[1] - p1[1], 2);
 }
 
-function convexHull(points)
+export function convexHull(points)
 {
     let minY = Infinity;
     let minIndex = -1;
@@ -49,7 +49,3 @@ function convexHull(points)
     }
     return stack;
 }
-
-const points = [[2, 3], [8, 4], [8, 7], [2, 7], [4, 5], [6, 6], [3, 2], [7, 3], [1, 9], [10, 1], [5, 9], [9, 9], [3, 8]];
-const convexHullPoints = convexHull(points);
-console.log("Punkty otoczki wypukłej:", convexHullPoints);
