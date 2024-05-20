@@ -10,11 +10,62 @@
         padding: 0;
         overflow: hidden;
       }
+      .controlPanel {
+        position: absolute;
+        text-align: center;
+        top: 0;
+        right: 0;
+        width: 400px;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        background-color: rgba(8, 14, 15, 0.808);
+        color: white;
+        font-family: Arial, sans-serif;
+        font-size: 24px;
+        border-left: 2px solid white;
+      }
+      button{
+        background-color: transparent;
+        border: none;
+        cursor: pointer;
+        margin: 10px;
+        color: white;
+      }
+      .activeButton{
+        border: 2px solid white;
+      }
     </style>
   </head>
 
   <body>
     <canvas></canvas>
+    <div class="controlPanel">
+           
+      <!-- title and 3 section -->
+      <h1>Panel sterowania</h1>
+      <div>
+        <!-- section 1 -->
+        <h2>Edycja mapy</h2>
+        <button id="button1"><img src="/src/assets/grass.png" alt="trawa"></button>
+        <button id="button2"><img src="/src/assets/path.png" alt="scieżka"></button>
+        <button id="button3" class="activeButton"><img src="/src/assets/none.png" alt="nic"></button>
+        <button id="button4"><img src="/src/assets/point.png" alt="punkt"></button>
+        <button id="button5"><img src="/src/assets/factory.png" width="64" height="64" alt="fabryka"></button>
+
+        <!-- section 2 -->
+        <h2>Generowanie grafu</h2>
+        <button id="button6" class=""><h3>Generuj graf</h3></button><br>
+        
+        <!-- section 3 -->
+        <h2>Villager</h2>
+        
+        <button id="button7" class=""><h3>Generuj villagera</h3></button><br> 
+
+    </div>
+
     <script type="module" src="src/index.js"></script>
   </body>
 </html>
