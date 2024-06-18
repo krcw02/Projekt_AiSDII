@@ -81,5 +81,9 @@ export function createFenceBetweenLandmarks(pathGraph, map) {
     }
   }
 
-  return { fence, landmarks }; 
+  fence = fence.filter(
+    (element, index, self) => self.indexOf(element) === index
+  );
+
+  return { fence, landmarks };
 }

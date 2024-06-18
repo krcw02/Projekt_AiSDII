@@ -1,5 +1,6 @@
 import * as PIXI from "pixi.js";
 import { Villager, VillagerPair } from "./Villager";
+import { pathTextures, factoryTextures, fenceTexture } from "./Textures";
 
 function tCoord(x, y) {
   const width = 128;
@@ -37,6 +38,7 @@ export class FenceBuilder {
     console.warn("Nie znaleziono sąsiada");
     return null;
   }
+
   findInPathGraph(element) {
     let x = element % 128;
     let y = Math.floor(element / 128);
@@ -50,13 +52,30 @@ export class FenceBuilder {
     return this.findNeighbour(element);
   }
 
+  getNameOfStatus(pair) {
+    if (pair.hired && pair.carries) return "Niesie";
+    if (pair.hired) return "Wraca";
+    return "Oczekuje";
+  }
+  createWorkSheets() {
+    let workSheet = "";
+    let i = 0;
+    this.villagerPairs.forEach((p) => {
+      workSheet += `<div class=ws${i++}> Para ${i} (${this.getNameOfStatus(
+        p
+      )})</div>`;
+    });
+    document.querySelector("#workSheet").innerHTML = workSheet;
+  }
+
   startBilding(fence, landmarks) {
-    console.log("startBuilding");
+    this.createWorkSheets();
+
     landmarks.pop();
 
     this.constructionPlan = new Map();
     this.landmarks = landmarks;
-
+    console.log(fence, landmarks);
     let start = 0;
     for (let i = 0; i < landmarks.length; i++) {
       const landmark = landmarks[i];
@@ -69,10 +88,12 @@ export class FenceBuilder {
       start = end;
     }
 
-    this.constructionPlanWithNodes; // arr of obj: {node: Node, fencePart: blocks[] (PIXI obj)}
+    const res = new Set();
+    console.log(this.constructionPlan);
 
     landmarks.forEach((element) => {
       let node = this.findNeighbour(element);
+      res.add(node);
       let fenceParts = this.constructionPlan.get(element);
       fenceParts.forEach((block) => {
         this.constructionPlanWithNodes.push({
@@ -81,7 +102,6 @@ export class FenceBuilder {
         });
       });
     });
-    console.log(this.constructionPlanWithNodes);
 
     //set all villagerPairs to false
     this.villagerPairs.forEach((pair) => {
@@ -90,21 +110,15 @@ export class FenceBuilder {
     });
 
     //send villager to build fence after 1 sec each
-    // let i = 0;
-    // let interval = setInterval(() => {
-    //   if (i < this.constructionPlanWithNodes.length) {
-         this.sendVillagerPair();
-    //     i++;
-    //   } else {
-    //     clearInterval(interval);
-    //   }
-    // }, 2000);
-
-    //after 1s
-    setTimeout(() => {
+    let interval = setInterval(() => {
+      if (this.constructionPlanWithNodes.length !== 0) {
         this.sendVillagerPair();
+      } else {
+        clearInterval(interval);
+      }
+    }, 1000);
 
-    }, 4000);
+    return res;
   }
 
   //metod to send new bilder villager from factory to fence and back
@@ -115,7 +129,6 @@ export class FenceBuilder {
     ) {
       return;
     }
-    console.log("sendVillager");
 
     // get first pair from array with is not hired
     let villagerPair = this.villagerPairs.find(
@@ -123,52 +136,54 @@ export class FenceBuilder {
     );
 
     if (!villagerPair) {
-      console.warn("Nie znaleziono dostępnej pary wieśniaków.");
+      // console.warn("Nie znaleziono dostępnej pary robotnikow.");
       return;
     }
 
     villagerPair.hired = true;
 
-    //find villager Pair in pathGraph
-
-    // let villagerPairNode = this.findInPathGraph(
-    //   villagerPair.pair.villager1.x + villagerPair.pair.villager1.y * 128
-    // );
-
     //use path in villagerPair go to fence
-    villagerPair.carries = true;
     villagerPair.actualPosition = this.constructionPlanWithNodes.shift();
-    villagerPair.pair.moveInPath(
-        villagerPair.actualPosition.node.path
-    );
 
-    villagerPair.pair.addEventListener("pathEnd", (obj) => {
-      this.nextMove(villagerPair);
+    villagerPair.carries = true;
+
+    //set wayBack as copy of actualPosition and reverse it with slice
+    villagerPair.wayBack = villagerPair.actualPosition.node.path
+      .slice()
+      .reverse();
+
+    villagerPair.pair.moveInPath(villagerPair.actualPosition.node.path, () => {
+      this.buildFence(villagerPair);
+      setTimeout(() => {
+        this.returnToFacotry(villagerPair);
+      }, 500);
     });
   }
 
-  nextMove(villagerPair) {
-    console.log("nextMove");
-    console.log(villagerPair);
-    if (villagerPair.carries == true) {
-      villagerPair.carries = false;
-      villagerPair.pair.moveInPath(
-        villagerPair.actualPosition.node.path.reverse()
-      );
-    }else if (villagerPair.carries == false) {
+  returnToFacotry(villagerPair) {
+    villagerPair.carries = false;
+    villagerPair.pair.moveInPath(villagerPair.wayBack, () => {
       villagerPair.hired = false;
-      this.sendVillagerPair();
-    }
+    });
+    villagerPair.pair.removeEventListener("pathEnd", () => {});
+  }
+
+  //metod to build fence by villager when willager is in right place
+  buildFence(villagerPair) {
+    let fencePart = villagerPair.actualPosition.fencePart;
+    fencePart.texture = fenceTexture;
   }
 
   addVillagerPair(villagerPair) {
-    console.log("addVillagerPair");
-    villagerPair.addEventListener("pathEnd", () => {});
+    villagerPair.addEventListener("pathEnd", () => {
+      this.createWorkSheets();
+    });
     this.villagerPairs.push({
       pair: villagerPair,
       hired: false,
       carries: false,
-      actualPosition: null
+      actualPosition: null,
+      wayBack: null,
     });
   }
 }

@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Pixi Viewport Template</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+      }
+      .controlPanel {
+        position: absolute;
+        text-align: center;
+        top: 0;
+        right: 0;
+        width: 400px;
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        background-color: rgba(8, 14, 15, 0.808);
+        color: white;
+        font-family: Arial, sans-serif;
+        font-size: 24px;
+        border-left: 2px solid white;
+        
+      }
+      .controlPanel > div {
+        overflow-y: scroll;
+        scrollbar-width: 0;
+
+      }
+      button{
+        background-color: transparent;
+        border: none;
+        cursor: pointer;
+        margin: 10px;
+        color: white;
+      }
+      .activeButton{
+        border: 2px solid white;
+      }
+
+      form {
+        display: flex;
+        flex-direction: column;
+      }
+
+      .dodawanie{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      .l{
+        margin-right: 10px;
+        width: 64px;
+        margin-left: -10px;
+      }
+      .radioPanel{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+      }
+      
+       .form{
+        /* displey all elements inline */
+        display: inline;
+
+      }
+      .form > input{
+        /* display all elements inline */
+        display: inline;
+        background-color: transparent;
+        border: 2px solid white;
+        color: white;
+        height: 30px;
+        padding-bottom: -10px;
+      }
+      .form > button{
+
+        display: inline;
+        background-color: transparent;
+        border: 2px solid white;
+        color: white;
+        height: 36px
+        
+      }
+      .form > label{
+        color: white;
+        font-size: 16px;
+        height: 20px;
+        
+      }
+      .listaPlaszczakow{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+
+      }
+      .grafik{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+      }
+      .plasczak{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin: 10px;
+        border: 2px solid white;
+        padding: 2px;
+        background-color: rgba(0, 0, 0, 0.274);
+        width: 300px;
+      }
+      .p > p{
+        margin: 10px;
+        font-size: 18px;
+      }
+      .Huffman{
+        display: inline;
+        background-color: transparent;
+        border: 2px solid white;
+        color: white;
+        height: 30px;
+        padding:2px;
+        margin: 2px;
+      }
+      .Huffman > .button{
+        display: inline;
+        background-color: transparent;
+        border: 2px solid white;
+        color: white;
+        height: 36px
+      }
+      #HufmanOutput{
+        max-width: 80%;
+        font-size: 14px;
+        text-align: center;
+        padding-left: 20px;
+
+      }
+
+    </style>
+  </head>
+
+  <body>
+    <canvas></canvas>
+    <div class="controlPanel">
+      <div>
+           
+      <!-- title and 3 section -->
+      <h1>Panel sterowania</h1>
+      <div>
+        <!-- section 1 -->
+        <h2>Edycja mapy</h2>
+        <button id="button1"><img src="/src/assets/grass.png" alt="trawa"></button>
+        <button id="button2"><img src="/src/assets/path.png" alt="scieżka"></button>
+        <button id="button3" class="activeButton"><img src="/src/assets/none.png" alt="nic"></button>
+        <button id="button4"><img src="/src/assets/point.png" alt="punkt"></button>
+        <button id="button5"><img src="/src/assets/factory.png" width="64" height="64" alt="fabryka"></button>
+
+        <!-- section 2 -->
+        <h2>Wprowadzanie płaszczaków</h2>
+
+        <div class="dodawanie">
+          
+          <div class="p">
+              <!-- 2 option ratio -->
+              <div class=" form">
+                <div class="ratioPanel" style="margin-bottom: -30px; margin-left: -10px;">
+                <input type="radio" id="leftRatio" name="ratio" value="2" checked>
+                <label for="leftRatio">lewa</label>
+                <input type="radio" id="rightRatio" name="ratio" value="1">
+                <label for="rightRatio">prawy</label></div>
+                <br>
+                <input id="VillagerName" type="text" placeholder="Imie"><button id="addVillager">Dodaj</button>
+                </div>
+            
+          </div>
+        </div>
+        <div class="listaPlaszczakow">
+           <img src="/src/assets/porter1.png" id="img1" style="display: none">
+           <img src="/src/assets/porter2.png" id="img2" style="display: none">
+          
+          
+
+        </div>
+
+        <h2>Problem I</h2>
+        <button id="button6" class=""><h3>Dobierz pracowników w pary i buduj płot</h3></button><br>
+        <p id="workSheet"></p>
+
+        <h2>Problem II</h2>
+        <div style="display: flex; justify-content: center; align-items: center;flex-direction: column;">
+        <textarea class="Huffman" id="HufmanInput" style="width: 80%; height: 80px;" placeholder="tekst melodii"></textarea>
+        </div> 
+        <input class="Huffman" type="text" id="FirstPattern" style="width: 120px;" placeholder="stary wzorzec">
+        <input class="Huffman" type="text" id="SecondPattern" style="width: 120px;" placeholder="nowy wzorzec">
+        <br>
+
+        <button id="button9" class="button"><h3>Generuj kod</h3></button><br>
+        <p id="HufmanOutput"></p>
+
+        
+        <!-- section 3 -->
+        <h2>Problem III</h2>
+        
+        <button id="button7" class=""><h3>Generuj Grafik</h3></button><br> 
+
+        <!-- div na grafik pracy straznikow -->
+        <div class="grafik">
+        </div>
+        <button id="button8" class=""></button><br>
+
+        
+
+
+</div>
+    </div>
+
+    <script type="module" src="src/index.js"></script>
+  </body>
+</html>
