@@ -1,5 +1,3 @@
-// module.js
-
 // FUNKCJA POMOCNICZA DO GENEROWANIA TABLICY PRZEJSC (prefix function) DLA WZORCA
 function obliczanieTablicyPrzejsc(wzorzec) {
     const M = wzorzec.length;

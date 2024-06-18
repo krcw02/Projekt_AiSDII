@@ -1,4 +1,4 @@
-const { zamienWzorzec } = require('./module');
+const { zamienWzorzec } = require('./KMP_kod');
 
 function assertEqual(actual, expected, message) {
     if (actual === expected) {
