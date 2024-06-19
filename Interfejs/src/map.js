@@ -289,6 +289,8 @@ document.querySelector("#button7").addEventListener("click", () => {
       //go to the first landmark
       let i = 0;
 
+      console.log(pointNumbers);
+
       villager.moveInPath(pathForGuard[0].path);
       villager.addEventListener("pathEnd", () => {
         i++;
@@ -298,7 +300,7 @@ document.querySelector("#button7").addEventListener("click", () => {
             pathForGuard[i - 1].path.length - 2
           );
           path.reverse();
-          console.log(pointNumbers[i - 1], pointNumbers[i]);
+          console.log(pointNumbers[i - 2], pointNumbers[i - 1]);
 
           setTimeout(
             () => {
@@ -308,7 +310,7 @@ document.querySelector("#button7").addEventListener("click", () => {
                 )
               );
             },
-            pointNumbers[i - 1] < pointNumbers[i] ? 10 : 3000
+            pointNumbers[i - 2] >= pointNumbers[i - 1] ? 10 : 3000
           );
         }
       });
