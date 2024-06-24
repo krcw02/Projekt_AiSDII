@@ -5,6 +5,8 @@
 2. Maciej Zajdel
 3. Kacper Szymczyk
 
+###Prezentacja: https://www.canva.com/design/DAGIeEFadOQ/1lHgcEXNX4MGQ9Ys_RNiMw/edit?utm_content=DAGIeEFadOQ&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton
+
 | L.p. | Specyfikacja problemu (dane i wyniki)                    | Do jakich treści w zadaniu odnosi się algorytm             | Zastosowane struktury danych                        | Informacje o zastosowanym algorytmie                                                                                                          |
 |------|----------------------------------------------------------|------------------------------------------------------------|----------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------|
 | 1    | Transport odcinków do budowy płotu                       | Transport odcinków z fabryki do miejsca budowy płotu       | Kolejka, Zbiór, Tablica                            | Algorytm BFS: Używany do znajdowania najkrótszej ścieżki, wskazując jednocześnie optymalną trasę transportu odcinków.                    |
